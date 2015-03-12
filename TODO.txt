@@ -1,0 +1,2 @@
+1, Create string processor
+2, Throw excpetion at invalid argument.
