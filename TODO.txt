@@ -1,3 +1,5 @@
 1, Create string processor
 2, Throw excpetion at invalid argument.
 3, Create function to create first dimension string arrays.
+4, Handle Labels
+5, Spit functions
