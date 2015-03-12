@@ -30,7 +30,13 @@ class StringProcessorBo
 		}
 
 		if ($this->isTwoDimensionalStringData($string)) {
-			$dataArray = $this->processTwoDimensionalStringData($string);
+			$useFirstLineAsLabel = strpos($string, self::OPTION_FIRST_LINE_AS_LABELS) === 0;
+			$dataArray = $this->processTwoDimensionalStringData(
+				$string,
+				PHP_EOL,
+				self::DATA_SEPARATOR,
+				$useFirstLineAsLabel
+			);
 		} else {
 			$dataArray = explode(self::DATA_SEPARATOR, $string);
 		}
@@ -57,11 +63,11 @@ class StringProcessorBo
 	 *
 	 * @return array
 	 */
-	protected function processTwoDimensionalStringData($string)
+	protected function processTwoDimensionalStringData($string, $columnDelimiter, $lineDelimiter, $usFirstLineAsLabel)
 	{
-		$firstDimensionalArray = $this->getFirstDimensionStringData($string);
+		$firstDimensionalArray = $this->getFirstDimensionStringData($string, $columnDelimiter);
 
-		if ($firstDimensionalArray[0] === self::OPTION_FIRST_LINE_AS_LABELS)
+		if ($usFirstLineAsLabel)
 		{
 			$labelData = explode(self::DATA_SEPARATOR, $firstDimensionalArray[1]);
 
@@ -69,12 +75,12 @@ class StringProcessorBo
 
 			$dataArray = array(
 				self::KEY_LABELS => $labelData,
-				self::KEY_DATA   => $this->getSecondDimensionStringData($firstDimensionalArray),
+				self::KEY_DATA   => $this->getSecondDimensionStringData($firstDimensionalArray, $lineDelimiter),
 			);
 		}
 		else
 		{
-			$dataArray = $this->getSecondDimensionStringData($firstDimensionalArray);
+			$dataArray = $this->getSecondDimensionStringData($firstDimensionalArray, $lineDelimiter);
 		}
 
 		return $dataArray;
@@ -87,13 +93,13 @@ class StringProcessorBo
 	 *
 	 * @return array
 	 */
-	protected function getSecondDimensionStringData($firstDimensionalArray)
+	protected function getSecondDimensionStringData($firstDimensionalArray, $lineDelimiter)
 	{
 		$dataArray = array();
 
 		foreach ($firstDimensionalArray as $firstDimensionalString)
 		{
-			$dataArray[] =  explode(self::DATA_SEPARATOR, $firstDimensionalString);
+			$dataArray[] =  explode($lineDelimiter, $firstDimensionalString);
 		}
 
 		return $dataArray;
@@ -106,8 +112,8 @@ class StringProcessorBo
 	 *
 	 * @return array
 	 */
-	protected function getFirstDimensionStringData($string)
+	protected function getFirstDimensionStringData($string, $columnDelimiter)
 	{
-		return explode(PHP_EOL, $string);
+		return explode($columnDelimiter, $string);
 	}
 }
