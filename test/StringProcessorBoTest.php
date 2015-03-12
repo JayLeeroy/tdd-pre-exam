@@ -98,4 +98,38 @@ class StringProcessorBoTest extends \PHPUnit_Framework_TestCase
 			array(array()),
 		);
 	}
+
+	/**
+	 * Test two dimensional text the process to array function.
+	 *
+	 * @param string $string           The string data to process.
+	 * @param array  $expectedResult   The expected result during the test.
+	 *
+	 * @dataProvider processTwoDimensionalTexDataToArrayDataProvider
+	 */
+	public function testProcessTwoDimensionalTexDataToArray($string, $expectedResult)
+	{
+		$returnedValue = $this->stringProcessor->processToArray($string);
+
+		$this->assertEquals($expectedResult, $returnedValue);
+	}
+
+	/**
+	 * Process two dimensional text to array  data provider.
+	 *
+	 * @return array
+	 */
+	public function processTwoDimensionalTexDataToArrayDataProvider()
+	{
+		return array(
+			array(
+				'a,b,c' . PHP_EOL . '100,982,444,990,1',
+				array(array('a', 'b', 'c'), array(100, 982, 444, 990, 1))
+			),
+			array(
+				'Mark,Anthony,marka@lib.de' . PHP_EOL . '100,982',
+				array(array('Mark', 'Anthony' ,'marka@lib.de'), array(100, 982))
+			),
+		);
+	}
 }

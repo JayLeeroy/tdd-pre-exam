@@ -3,6 +3,8 @@ namespace Kata;
 
 class StringProcessorBo
 {
+	const DATA_SEPARATOR = ',';
+
 	/**
 	 * Precess the string into array.
 	 *
@@ -19,6 +21,34 @@ class StringProcessorBo
 			throw new \InvalidArgumentException();
 		}
 
-		return explode(',', $string);
+		$firstDimensionalArray = $this->getFirstDimensionTextData($string);
+
+		if (count($firstDimensionalArray) > 1)
+		{
+			$dataArray = array();
+
+			foreach ($firstDimensionalArray as $firstDimensionalString)
+			{
+				$dataArray[] =  explode(self::DATA_SEPARATOR, $firstDimensionalString);
+			}
+		}
+		else
+		{
+			$dataArray = explode(self::DATA_SEPARATOR, $string);
+		}
+
+		return $dataArray;
+	}
+
+	/**
+	 * Gets a first dimensional text data.
+	 *
+	 * @param $string
+	 *
+	 * @return array
+	 */
+	protected function getFirstDimensionTextData($string)
+	{
+		return explode(PHP_EOL, $string);
 	}
 }
